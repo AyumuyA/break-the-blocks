@@ -2,7 +2,7 @@
 let isGameActive = false;
 let fallingBlock = [[]];
 let fallingBlockPos = {x: 0, y: 0};
-
+let ctrl_BlockMV = {rollL: false, rollR: false, moveL: false, moveR: false, moveD: false};
 window.addEventListener("load", gameStart);
 
 function gameStart() {
@@ -22,34 +22,69 @@ function gameStart() {
   }
   generateFallingBlock();
   update_blockData(newBlockData);
+  document.body.addEventListener("keydown", keyDownGet);
+  document.body.addEventListener("keyup", keyUpGet);
   document.body.addEventListener("keydown", keyEvent);
+
   // generateFallingBlock();
   setTimeout(gameMainLoop, 1000);
 }
 
+function keyDownGet(e=null) {
+  if (isGameActive) {
+    console.log(`keyDownGet: ${e.code}`);
+    if (e.code == "KeyZ") // left rolling
+      ctrl_BlockMV.rollL = true;
+    if (e.code == "KeyX") // right rolling
+      ctrl_BlockMV.rollR = true;
+    if (e.code == "ArrowDown")
+      ctrl_BlockMV.moveD = true;
+    if (e.code == "ArrowLeft")
+      ctrl_BlockMV.moveL = true;
+    if (e.code == "ArrowRight")
+      ctrl_BlockMV.moveR = true;
+  }
+}
+
+function keyUpGet(e=null) {
+  if (isGameActive) {
+    console.log(`keyUpGet: ${e.code}`);
+    if (e.code == "KeyZ") // left rolling
+      ctrl_BlockMV.rollL = false;
+    if (e.code == "KeyX") // right rolling
+      ctrl_BlockMV.rollR = false;
+    if (e.code == "ArrowDown")
+      ctrl_BlockMV.moveD = false;
+    if (e.code == "ArrowLeft")
+      ctrl_BlockMV.moveL = false;
+    if (e.code == "ArrowRight")
+      ctrl_BlockMV.moveR = false;
+  }
+}
+
 function keyEvent(e=null) {
   if (isGameActive) {
-    console.log(`keyEvent: ${e.code}`);
-    if (e.code == "ArrowUp") {
+    if (ctrl_BlockMV.rollL == true) // left rolling
       console.log("Under construction...");
-    } else if (e.code == "ArrowDown") {
-      faiingBlockMove({x: 0, y: 1});
-    } else if (e.code == "ArrowLeft") {
-      faiingBlockMove({x: -1, y: 0});
-    } else if (e.code == "ArrowRight") {
-      faiingBlockMove({x: 1, y: 0});
-    }
+    if (ctrl_BlockMV.rollR == true) // right rolling
+      console.log("Under construction...");
+    if (ctrl_BlockMV.moveD == true)
+      fallingBlockMove({x: 0, y: 1});
+    if (ctrl_BlockMV.moveL == true)
+      fallingBlockMove({x: -1, y: 0});
+    if (ctrl_BlockMV.moveR == true)
+      fallingBlockMove({x: 1, y: 0});
   }
 }
 
 function gameMainLoop() {
-  faiingBlockMove({x: 0, y: 1});
+  fallingBlockMove({x: 0, y: 1});
   if (isGameActive) {
     setTimeout(gameMainLoop, 1000);
   }
 }
 
-function faiingBlockMove(move) {
+function fallingBlockMove(move) {
   let updateFallingBlockFlag = true;
   let blockShape = {x: fallingBlock[0].length, y: fallingBlock.length};
   let fallingBlockPosNext = {
@@ -166,7 +201,7 @@ function drawGameScreen() {
         // console.log(`(y:${i}, j:${j}) skipped`);
       }
     }
-  }   
+  }
 }
 
 function gameover() {

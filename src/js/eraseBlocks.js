@@ -32,7 +32,6 @@ function eraseLine(lineNum) {
       }
       if(a == newEraseBlocks.length) {
         newEraseBlocks.push({x:x, y:y});
-        combo++;
         if(y > 0 && newBlockData[y - 1][x] == type) {
           newEraseBlocks = searchSameBlock(y - 1, x, type, newEraseBlocks);
         }
