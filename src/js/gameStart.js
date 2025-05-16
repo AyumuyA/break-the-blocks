@@ -24,7 +24,7 @@ function gameStart() {
   update_blockData(newBlockData);
   document.body.addEventListener("keydown", keyDownGet);
   document.body.addEventListener("keyup", keyUpGet);
-  document.body.addEventListener("keydown", keyEvent);
+  setInterval(keyEvent, 100);
 
   // generateFallingBlock();
   setTimeout(gameMainLoop, 1000);
@@ -62,7 +62,7 @@ function keyUpGet(e=null) {
   }
 }
 
-function keyEvent(e=null) {
+function keyEvent() {
   if (isGameActive) {
     if (ctrl_BlockMV.rollL == true) // left rolling
       console.log("Under construction...");
